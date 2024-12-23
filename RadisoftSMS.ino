@@ -8,11 +8,13 @@ const char* password = "147890147890";
 // GSM module setup
 #define RX_PIN 17  // Connect to TX of SIM900A
 #define TX_PIN 16  // Connect to RX of SIM900A
-HardwareSerial SIM900A(1);
+SoftwareSerial SIM900A(RX_PIN, TX_PIN);
+
+String apiEndpoint = "http://188.166.251.135:8090/api/v1/order/sms";
 
 void setup() {
-    Serial.begin(115200); // Serial Monitor
-    SIM900A.begin(9600, SERIAL_8N1, RX_PIN, TX_PIN); // Initialize GSM
+    Serial.begin(9600); // Serial Monitor
+    SIM900A.begin(9600); // Initialize GSM
     delay(3000);
 
     // Set GSM text mode and encoding
@@ -25,9 +27,15 @@ void setup() {
 
     // Connect to WiFi
     WiFi.begin(ssid, password);
+    Serial.print("Connecting to WiFi.");
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
+        Serial.print(".");
     }
+    Serial.println("\nWiFi connected!");
+    Serial.print("IP Address: ");
+    Serial.println(WiFi.localIP());
+    delay(5000);
 }
 
 
@@ -39,35 +47,39 @@ void loop() {
     Serial.println(sms);
 
     // Send SMS content to the API
+    Serial.println("Sending to API");
     sendToAPI(sms);
   }
 }
 
-void sendToAPI(String smsText) {
+String sendToAPI(String smsText) {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
+    http.begin(apiEndpoint);
+    http.addHeader("Content-Type", "application/json");
 
-    // API URL with SMS text
-    String apiUrl = "http://188.166.251.135:8090/api/v1/order/sms?text=" + urlencode(smsText);
-    ;
+    String payload = "{\n\"sms\" : \""+smsText+"\"\n}";
+    Serial.println("Sending to " + apiEndpoint);
+    Serial.println(payload);
+    int httpResponseCode = http.POST(payload);
 
-    http.begin(apiUrl);
-
-    // Make GET request
-    int httpResponseCode = http.GET();
-    if (httpResponseCode > 0) {
-      Serial.println("API Response Code: " + String(httpResponseCode));
+    if (httpResponseCode == 200) {
       String response = http.getString();
-      Serial.println("API Response: " + response);
+      Serial.println("Server Response:");
+      Serial.println(response);
+      http.end();
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(200);
+      digitalWrite(LED_BUILTIN, LOW);
+      return response;
     } else {
-      Serial.println("Error in API call: " + String(http.errorToString(httpResponseCode).c_str()));
-      Serial.print("Error code : ");
+      Serial.print("Error in HTTP request : ");
       Serial.println(httpResponseCode);
+      Serial.println(String(http.errorToString(httpResponseCode).c_str()));
     }
     http.end();
-  } else {
-    Serial.println("WiFi disconnected!");
   }
+  return "";
 }
 
 String urlencode(String str) {
