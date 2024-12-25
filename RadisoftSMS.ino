@@ -81,23 +81,3 @@ String sendToAPI(String smsText) {
   }
   return "";
 }
-
-String urlencode(String str) {
-  String encodedString = "";
-  char c;
-  char code0;
-  char code1;
-  for (int i = 0; i < str.length(); i++) {
-    c = str.charAt(i);
-    if (isalnum(c)) {
-      encodedString += c;
-    } else {
-      code0 = (c >> 4) & 0xF;
-      code1 = c & 0xF;
-      encodedString += '%';
-      encodedString += (code0 < 10) ? char(code0 + '0') : char(code0 - 10 + 'A');
-      encodedString += (code1 < 10) ? char(code1 + '0') : char(code1 - 10 + 'A');
-    }
-  }
-  return encodedString;
-}
