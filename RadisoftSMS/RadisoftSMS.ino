@@ -1,9 +1,11 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <SoftwareSerial.h>
+#include <ArduinoJson.h>
 
-const char* ssid = "Ismail";
-const char* password = "147890147890";
+
+const char* ssid = "yousuf rana ";
+const char* password = "yousuf298989";
 
 // GSM module setup
 #define RX_PIN 17  // Connect to TX of SIM900A
@@ -58,7 +60,7 @@ String sendToAPI(String smsText) {
     http.begin(apiEndpoint);
     http.addHeader("Content-Type", "application/json");
 
-    String payload = "{\n\"sms\" : \""+smsText+"\"\n}";
+    String payload = createJson(smsText);
     Serial.println("Sending to " + apiEndpoint);
     Serial.println(payload);
     int httpResponseCode = http.POST(payload);
@@ -80,4 +82,15 @@ String sendToAPI(String smsText) {
     http.end();
   }
   return "";
+}
+
+String createJson(const String &input) {
+    // Create a dynamic JSON document
+    DynamicJsonDocument doc(256);
+    doc["sms"] = input;
+
+    // Serialize the JSON object to a string
+    String jsonString;
+    serializeJson(doc, jsonString);
+    return jsonString;
 }
