@@ -98,6 +98,7 @@ bool isDifferenceLessThenXSeconds(const string &time1, const string &time2, int 
     return difference <= x;
 }
 
+int totalSMSsend = 0;
 bool sendToAPI(vector<string> &headerWithSMSBody)
 {
     // TODO
@@ -109,6 +110,8 @@ bool sendToAPI(vector<string> &headerWithSMSBody)
     }
     cout << "\n\nSend is done\n"
          << endl;
+    totalSMSsend++;
+    cout << "Total SMS send: " << totalSMSsend << endl;
     return true;
 }
 
@@ -215,7 +218,7 @@ int main()
     {
         allSMS.push_back(s2);
     }
-    if(s3.find("+CMT:") != -1)
+    if (s3.find("+CMT:") != -1)
     {
         allSMS.push_back(s3);
     }
@@ -293,6 +296,7 @@ int main()
 
     cout << "\n\nEnd of the program" << endl;
     cout << "Length is : " << allSMSWithInfo.size() << endl;
+    cout << "Total SMS send: " << totalSMSsend << endl;
 
     return 0;
 }
