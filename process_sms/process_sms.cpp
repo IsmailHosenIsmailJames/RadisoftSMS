@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <regex>
+// #include <algorithm>
 
 using namespace std;
 
@@ -12,65 +11,57 @@ vector<string> extractHeaderInformation(const string &input)
 {
     vector<string> result;
 
-    // Regular expressions for each required field
-    regex firstNumberRegex(R"(\+CMT: \"(\+\d+))");
-    regex dateRegex(R"((\d{2}/\d{2}/\d{2}))");
-    regex timeRegex(R"((\d{2}:\d{2}:\d{2}))");
-    regex secondNumberRegex(R"(,\"(\+\d+)\".*?,\d+,\d+$)");
-    regex lengthRegex(R"(,(\d+)\n)");
 
-    smatch match;
 
     // Extract first number
-    if (regex_search(input, match, firstNumberRegex))
-    {
-        result.push_back(match[1]); // First phone number
+    int firstNumberIndex = input.find("\"+88");
+    if(firstNumberIndex != -1){
+        string firstNumber = input.substr(firstNumberIndex + 1, 14);
+        result.push_back(firstNumber);
     }
-    else
-    {
+    else{
         result.push_back("");
     }
 
     // Extract date
-    if (regex_search(input, match, dateRegex))
-    {
-        result.push_back(match[1]); // Date
+    int indexOfDate = input.find("/");
+    if(indexOfDate != -1){
+        string date = input.substr(indexOfDate - 2, 8);
+        result.push_back(date);
     }
-    else
-    {
+    else{
         result.push_back("");
     }
 
     // Extract time
-    if (regex_search(input, match, timeRegex))
-    {
-        result.push_back(match[1]); // Time
+    int indexOfTime = input.find_last_of(":");
+    if(indexOfTime != -1){
+        string time = input.substr(indexOfTime - 5, 8);
+        result.push_back(time);
     }
-    else
-    {
+    else{
         result.push_back("");
     }
 
     // Extract second number
-    if (regex_search(input, match, secondNumberRegex))
-    {
-        result.push_back(match[1]); // Second phone number
+    int indexOfSecondNumber = input.find_last_of("+88");
+    if(indexOfSecondNumber != -1){
+        string secondNumber = input.substr(indexOfSecondNumber-2, 14);
+        result.push_back(secondNumber);
     }
-    else
-    {
+    else{
         result.push_back("");
     }
 
     // Extract length of full text
-    if (regex_search(input, match, lengthRegex))
-    {
-        result.push_back(match[1]); // Length
+    int indexOfLength = input.find_last_of(",");
+    if(indexOfLength != -1){
+        string length = input.substr(indexOfLength + 1, 3);
+        result.push_back(length);
     }
-    else
-    {
+    else{
         result.push_back("");
     }
-
     return result;
 }
 
@@ -210,18 +201,24 @@ int main()
     string s1 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:26+24\",145,32,0,0,\"+8801700000600\",145,153\n255There we have a large SMS with 6 sentence.\nThere we have a large SMS with 6 sentence\nThere we have a large SMS with 6 sentence\nThere we have a large S";
     string s2 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:27+24\",145,32,0,0,\"+8801700000600\",145,99\nMS with 6 sentence\nThere we have a large SMS with 6 sentence";
     string s3 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:27+24\",145,32,0,0,\"+8801700000600\",145,99\n\nThere we have a large SMS with 6 sentence";
-    if (s1.find("+CMT:") != -1)
-    {
+
         allSMS.push_back(s1);
-    }
-    if (s2.find("+CMT:") != -1)
-    {
         allSMS.push_back(s2);
-    }
-    if (s3.find("+CMT:") != -1)
-    {
         allSMS.push_back(s3);
-    }
+    
+    s1 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:56+24\",145,32,0,0,\"+8801700000600\",145,153\n255There we have a large SMS with 6 sentence.\nThere we have a large SMS with 6 sentence\nThere we have a large SMS with 6 sentence\nThere we have a large S";
+    s2 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:56+24\",145,32,0,0,\"+8801700000600\",145,99\nMS with 6 sentence\nThere we have a large SMS with 6 sentence";
+    s3 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:57+24\",145,32,0,0,\"+8801700000600\",145,99\n\nThere we have a large SMS with 6 sentence";
+
+        allSMS.push_back(s1);
+        allSMS.push_back(s2);
+        allSMS.push_back(s3);
+
+        // allSMS.push_back(s1);
+        // allSMS.push_back(s2);
+        // allSMS.push_back(s3);
+
+
 
     vector<vector<string>> allSMSWithInfo;
 
