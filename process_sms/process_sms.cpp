@@ -231,7 +231,9 @@ int main()
         headerInfoWithBody.push_back(body);
         string first3Char = body.substr(0, 3);
         cout << first3Char << endl;
-        if ((!isExitsInAllSMSVector(headerInfoWithBody)) && first3Char[0] <= '9' && first3Char[0] >= '0' && first3Char[1] <= '9' && first3Char[1] >= '0' && first3Char[2] <= '9' && first3Char[2] >= '0')
+        bool isExits = isExitsInAllSMSVector(headerInfoWithBody);
+        cout << "Is earlier exits in allSMSVector: " << isExits << endl;
+        if ((!isExits) && first3Char[0] <= '9' && first3Char[0] >= '0' && first3Char[1] <= '9' && first3Char[1] >= '0' && first3Char[2] <= '9' && first3Char[2] >= '0')
         {
             int lenOfSMSUpcomingSMS = stoi(first3Char);
             cout << "Length of SMS: " << lenOfSMSUpcomingSMS << endl;

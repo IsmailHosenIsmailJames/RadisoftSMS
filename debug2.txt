@@ -1,0 +1,82 @@
+Connecting to WiFi......
+WiFi connected!
+IP Address: 192.168.83.101
+........................Received SMS: 
+
+*PSNWID: "470","01", "Grameenphone", 0, "", 8
+
+DST: 0
+
+Not a SMS response....
+...Received SMS: 
+
++CMT: "+8801324204739","","25/01/02,19:44:29+24",145,32,0,0,"+8801700000600",145,153
+255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+
+First 3 char are : +CM
+Is earlier exits in allSMSVector: 0
+Part of another SMS
+send to Searching for main SMS
+Header with SMS body: 
++CMT: "+8801324204739","","25/01/02,19:44:29+24",145,32,0,0,"+8801700000600",145,153
+255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+
+0
+SMS is part of another SMS
+
+Sending to API.....
+
++CMT: "+8801324204739","","25/01/02,19:44:29+24",145,32,0,0,"+8801700000600",145,153
+255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+
+
+Send is done
+
+Total SMS send: 1SMS is not from the customers. Sending to API
+.........Received SMS: 
+
+*PSNWID: "470","01", "Grameenphone", 0, "", 8
+
+DST: 0
+
+Not a SMS response....
+..Received SMS: 
+
++CMT: "+8801324204739","","25/01/02,19:44:30+24",145,32,0,0,"+8801700000600",145,102
+MS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+
+First 3 char are : +CM
+Is earlier exits in allSMSVector: 0
+Part of another SMS
+send to Searching for main SMS
+Header with SMS body: 
++CMT: "+8801324204739","","25/01/02,19:44:30+24",145,32,0,0,"+8801700000600",145,102
+MS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+
+0
+SMS is part of another SMS
+
+Sending to API.....
+
++CMT: "+8801324204739","","25/01/02,19:44:30+24",145,32,0,0,"+8801700000600",145,102
+MS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+
+
+Send is done
+
+Total SMS send: 2SMS is not from the customers. Sending to API

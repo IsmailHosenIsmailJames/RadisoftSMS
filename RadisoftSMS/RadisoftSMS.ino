@@ -81,30 +81,28 @@ bool isDifferenceLessThenXSeconds(const string &time1, const string &time2, int 
   int difference = abs(totalSeconds1 - totalSeconds2);
 
   // Return true if the difference is at least 5 seconds
-  // cout << "Difference: " << difference << endl;
+  Serial.printf("Difference: %d\n", difference);
   return difference <= x;
 }
 
 int totalSMSsend = 0;
 bool sendToAPI(vector<string> &headerWithSMSBody) {
-  Serial.println ( "\nSending to API.....\n");
-  for (int i = 0; i < headerWithSMSBody.size(); i++)
-  {
-     Serial.print(headerWithSMSBody[i].c_str());
+  Serial.println("\nSending to API.....\n");
+  for (int i = 0; i < headerWithSMSBody.size(); i++) {
+    Serial.print(headerWithSMSBody[i].c_str());
   }
-  Serial.println ( "\n\nSend is done\n");
+  Serial.println("\n\nSend is done\n");
   totalSMSsend++;
-  Serial.printf("Total SMS send: %d", totalSMSsend );
+  Serial.printf("Total SMS send: %d", totalSMSsend);
   return true;
 }
 
 bool isMatchedTwoHeader(vector<string> &vector1, vector<string> &vector2) {
-  // cout << "-----------------------isMatchedTwoHeader" << endl;
   bool numberMatch = vector1[0].compare(vector2[0]) == 0;
   bool dateMatch = vector1[1].compare(vector2[1]) == 0;
   bool timeMatch = isDifferenceLessThenXSeconds(vector1[2], vector2[2], maxTimeDifference);
   bool secondNumberMatch = vector1[3].compare(vector2[3]) == 0;
-  // cout << "Comparing: " << numberMatch << dateMatch << timeMatch << secondNumberMatch << endl;
+  Serial.printf("Comparing: %d%d%d%d\n", numberMatch, dateMatch, timeMatch, secondNumberMatch);
   if (numberMatch && dateMatch && timeMatch && secondNumberMatch) {
     return true;
   } else {
@@ -122,25 +120,26 @@ bool isExitsInAllSMSVector(vector<string> &headerWithSMSBody) {
 }
 
 bool searchForMainSMSAndInsert(vector<string> &headerWithSMSBody) {
-  // cout << "send to Searching for main SMS" << endl;
-  // cout << "Header with SMS body: " << endl;
-  // for (int i = 0; i < headerWithSMSBody.size(); i++)
-  // {
-  //     cout << i << ". " << headerWithSMSBody[i] << " ";
-  // }
-  // cout << endl;
-  // cout << allSMSWithInfo.size() << endl;
+  Serial.println("send to Searching for main SMS");
+  Serial.println("Header with SMS body: ");
+  for (int i = 0; i < headerWithSMSBody.size(); i++) {
+    Serial.print(headerWithSMSBody[i].c_str());
+  }
+  Serial.println();
+  Serial.println(allSMSWithInfo.size());
   for (int i = 0; i < allSMSWithInfo.size(); i++) {
     if (isMatchedTwoHeader(allSMSWithInfo[i], headerWithSMSBody)) {
       // found the main SMS
-      // cout << "Found the main SMS" << endl;
+      Serial.println("Found the main SMS");
       string fullSMS = allSMSWithInfo[i][5] + headerWithSMSBody[5];
       int lenOfFullSMSOnSMSdata = stoi(allSMSWithInfo[i][6]);
 
       headerWithSMSBody.pop_back();
       headerWithSMSBody.push_back(fullSMS);
 
-      // cout << fullSMS << "---------" << lenOfFullSMSOnSMSdata << endl;
+      Serial.print(fullSMS.c_str());
+      Serial.print("---------");
+      Serial.println(lenOfFullSMSOnSMSdata);
 
       if (fullSMS.length() >= lenOfFullSMSOnSMSdata) {
         // send to API
@@ -150,8 +149,8 @@ bool searchForMainSMSAndInsert(vector<string> &headerWithSMSBody) {
       } else {
         allSMSWithInfo[i].erase(allSMSWithInfo[i].begin() + 5);
         allSMSWithInfo[i].insert(allSMSWithInfo[i].begin() + 5, fullSMS);
-        // cout << allSMSWithInfo[i][5] << endl;
-        // cout << "Inserted again" << endl;
+        Serial.println(allSMSWithInfo[i][5].c_str());
+        Serial.println("Inserted again");
         return true;
       }
       return true;
@@ -171,98 +170,7 @@ void checkAllSMSAndSend() {
   }
 }
 
-// int main() {
-//   vector<string> allSMS;
-//   string s1 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:26+24\",145,32,0,0,\"+8801700000600\",145,153\n255There we have a large SMS with 6 sentence.\nThere we have a large SMS with 6 sentence\nThere we have a large SMS with 6 sentence\nThere we have a large S";
-//   string s2 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:27+24\",145,32,0,0,\"+8801700000600\",145,99\nMS with 6 sentence\nThere we have a large SMS with 6 sentence";
-//   string s3 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:27+24\",145,32,0,0,\"+8801700000600\",145,99\n\nThere we have a large SMS with 6 sentence";
 
-//   allSMS.push_back(s1);
-//   allSMS.push_back(s2);
-//   allSMS.push_back(s3);
-
-//   s1 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:56+24\",145,32,0,0,\"+8801700000600\",145,153\n255There we have a large SMS with 6 sentence.\nThere we have a large SMS with 6 sentence\nThere we have a large SMS with 6 sentence\nThere we have a large S";
-//   s2 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:56+24\",145,32,0,0,\"+8801700000600\",145,99\nMS with 6 sentence\nThere we have a large SMS with 6 sentence";
-//   s3 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:57+24\",145,32,0,0,\"+8801700000600\",145,99\n\nThere we have a large SMS with 6 sentence";
-
-
-
-//   allSMS.push_back(s1);
-//   allSMS.push_back(s2);
-//   allSMS.push_back(s3.c_str());
-
-//   // allSMS.push_back(s1);
-//   // allSMS.push_back(s2);
-//   // allSMS.push_back(s3);
-
-
-//   for (int i = 0; i < allSMS.size(); i++) {
-//     string sms = allSMS[i];
-//     int indexOfEndOfFirstLine = sms.find("\n");
-//     string header = sms.substr(0, indexOfEndOfFirstLine);
-//     string body = sms.substr(indexOfEndOfFirstLine + 1);
-//     vector<string> headerInfoWithBody = extractHeaderInformation(header);
-//     headerInfoWithBody.push_back(body);
-//     string first3Char = body.substr(0, 3);
-//     // cout << first3Char << endl;
-//     if ((!isExitsInAllSMSVector(headerInfoWithBody)) && first3Char[0] <= '9' && first3Char[0] >= '0' && first3Char[1] <= '9' && first3Char[1] >= '0' && first3Char[2] <= '9' && first3Char[2] >= '0') {
-//       int lenOfSMSUpcomingSMS = stoi(first3Char);
-//       // cout << "Length of SMS: " << lenOfSMSUpcomingSMS << endl;
-//       // cout << "Length of body: " << body.length() << endl;
-//       if (lenOfSMSUpcomingSMS <= body.length()) {
-//         // sms is short. No need to another sms to complete
-//         // send To API and don't include to buffer
-//         sendToAPI(headerInfoWithBody);
-//         // cout << i << ". SMS is short. Sending to API" << endl;
-//       } else {
-//         // sms have more parts to receive
-//         // wait for next part of SMS and send to buffer
-//         headerInfoWithBody.push_back(first3Char);
-//         allSMSWithInfo.push_back(headerInfoWithBody);
-//         // cout << i << ". SMS is long. Waiting for next part" << endl;
-//       }
-//     } else {
-
-//       // part of another SMS.
-//       // Search for that and insert
-//       // if not found, its not form the customers
-//       // cout << "Part of another SMS" << endl;
-//       bool isFound = searchForMainSMSAndInsert(headerInfoWithBody);
-//       // cout << i << ". SMS is part of another SMS" << endl;
-//       if (!isFound) {
-//         // not found. Not from the customers
-//         sendToAPI(headerInfoWithBody);
-//         // cout << i << ". SMS is not from the customers. Sending to API" << endl;
-//       }
-//     }
-
-//     // check allSMSWithInfo
-//     // if timeout for receiving SMS send uncompleted sms to server;
-//     // if found completion then send to api.
-//     // cout << i << ". Before checking all SMS with len " << allSMSWithInfo.size() << endl;
-//     checkAllSMSAndSend();
-//     // cout << i << ". After checking all SMS with len " << allSMSWithInfo.size() << endl;
-
-//     // print allSMSWithInfo
-//     // cout << "Printing allSMSWithInfo" << endl;
-//     // for (int i = 0; i < allSMSWithInfo.size(); i++)
-//     // {
-//     //     for (int j = 0; j < allSMSWithInfo[i].size(); j++)
-//     //     {
-//     //         cout << allSMSWithInfo[i][j] << " ";
-//     //     }
-//     // }
-//     // cout << "\n\n--End of printing allSMSWithInfo" << endl
-//     //      << endl
-//     //      << endl;
-//   }
-
-//   // cout << "\n\nEnd of the program" << endl;
-//   // cout << "Length is : " << allSMSWithInfo.size() << endl;
-//   // cout << "Total SMS send: " << totalSMSsend << endl;
-
-//   return 0;
-// }
 
 void pushSmsAndCheck(string sms) {
   if (sms.find("+CMT") != -1) {
@@ -272,39 +180,42 @@ void pushSmsAndCheck(string sms) {
     vector<string> headerInfoWithBody = extractHeaderInformation(header);
     headerInfoWithBody.push_back(body);
     string first3Char = body.substr(0, 3);
-    // cout << first3Char << endl;
-    if ((!isExitsInAllSMSVector(headerInfoWithBody)) && first3Char[0] <= '9' && first3Char[0] >= '0' && first3Char[1] <= '9' && first3Char[1] >= '0' && first3Char[2] <= '9' && first3Char[2] >= '0') {
+    Serial.print("First 3 char are : ");
+    Serial.println(first3Char.c_str());
+    bool isExits = isExitsInAllSMSVector(headerInfoWithBody);
+    Serial.printf( "Is earlier exits in allSMSVector: %d\n", isExits);
+    if ((!isExits) && first3Char[0] <= '9' && first3Char[0] >= '0' && first3Char[1] <= '9' && first3Char[1] >= '0' && first3Char[2] <= '9' && first3Char[2] >= '0') {
       int lenOfSMSUpcomingSMS = stoi(first3Char);
-      // cout << "Length of SMS: " << lenOfSMSUpcomingSMS << endl;
-      // cout << "Length of body: " << body.length() << endl;
+      Serial.printf("Length of SMS: %d\n", lenOfSMSUpcomingSMS);
+      Serial.printf("Length of body: %d\n", body.length());
       if (lenOfSMSUpcomingSMS <= body.length()) {
         // sms is short. No need to another sms to complete
         // send To API and don't include to buffer
         sendToAPI(headerInfoWithBody);
-        // cout << i << ". SMS is short. Sending to API" << endl;
+        Serial.println("%d. SMS is short. Sending to API");
       } else {
         // sms have more parts to receive
         // wait for next part of SMS and send to buffer
         headerInfoWithBody.push_back(first3Char);
         allSMSWithInfo.push_back(headerInfoWithBody);
-        // cout << i << ". SMS is long. Waiting for next part" << endl;
+        Serial.println("SMS is long. Waiting for next part");
       }
     } else {
 
       // part of another SMS.
       // Search for that and insert
       // if not found, its not form the customers
-      // cout << "Part of another SMS" << endl;
+      Serial.println("Part of another SMS");
       bool isFound = searchForMainSMSAndInsert(headerInfoWithBody);
-      // cout << i << ". SMS is part of another SMS" << endl;
+      Serial.println("SMS is part of another SMS");
       if (!isFound) {
         // not found. Not from the customers
         sendToAPI(headerInfoWithBody);
-        // cout << i << ". SMS is not from the customers. Sending to API" << endl;
+        Serial.println("SMS is not from the customers. Sending to API");
       }
     }
-  }else{
-    Serial.println("Not a SMS response....")
+  } else {
+    Serial.println("Not a SMS response....");
   }
 }
 
@@ -314,25 +225,40 @@ const char *ssid = "Ismail";
 const char *password = "147890147890";
 
 // GSM module setup
-#define RX_PIN 17  // Connect to TX of SIM900A
-#define TX_PIN 16  // Connect to RX of SIM900A
-SoftwareSerial SIM900A(RX_PIN, TX_PIN);
+#define RX_PIN 17       // Connect to TX of SIM900A
+#define TX_PIN 16       // Connect to RX of SIM900A
+HardwareSerial GSM(1);  // UART1 for GSM communication
 
 String apiEndpoint = "http://188.166.251.135:8090/api/v1/order/sms";
 
+void sendATCommand(const char *command, uint16_t delayMs = 1000) {
+  GSM.println(command);  // Send AT command
+  delay(delayMs);        // Wait for a response
+  while (GSM.available()) {
+    String response = GSM.readString();  // Read GSM response
+    Serial.println(response);            // Print GSM response to Serial Monitor
+  }
+}
+
 void setup() {
-  Serial.begin(9600);   // Serial Monitor
-  SIM900A.begin(9600);  // Initialize GSM
+  Serial.begin(115200);  // Serial Monitor
+  // Initialize UART1 for GSM
+  GSM.begin(9600, SERIAL_8N1, RX_PIN, TX_PIN);
+
+  Serial.println("Initializing GSM module...");
   delay(3000);
 
-  // Set GSM text mode and encoding
-  SIM900A.println("AT+CMGF=1");  // Text mode
+  // Step 1: Set SMS mode to text
+  sendATCommand("AT+CMGF=1");
   delay(100);
-  SIM900A.println("AT+CSCS=\"GSM\"");  // ASCII encoding
+
+  // Step 2: Set SMS storage to internal memory
+  sendATCommand("AT+CPMS=\"ME\"");
   delay(100);
-  SIM900A.println("AT+CSMP=17,167,0,0");  // Enable concatenation
-  delay(100);
-  SIM900A.println("AT+CNMI=1,2,0,0,0");  // Forward SMS to ESP32
+
+  // Step 3: List unread messages
+  Serial.println("Reading unread messages...");
+  sendATCommand("AT+CMGL=\"REC UNREAD\"");
   delay(100);
 
   // Connect to WiFi
@@ -348,47 +274,42 @@ void setup() {
   delay(5000);
 }
 
-unsigned long previousMillis = 0; // Stores the last time the task was executed
-const unsigned long interval = 1000; // Interval in milliseconds (1 second)
-
+unsigned long previousMillis = 0;     // Stores the last time the task was executed
+const unsigned long interval = 1000;  // Interval in milliseconds (1 second)
 
 void loop() {
-  // Check if GSM module sends data
-  if (SIM900A.available()) {
-    String sms = SIM900A.readString();
+  // Keep checking for responses or further actions
+  while (GSM.available()) {
     Serial.println("Received SMS: ");
-    Serial.println(sms);
-
+    String sms = GSM.readString();
+    Serial.println(sms);  // Print GSM module responses
     // Send SMS content to the API
     // Serial.println("Sending to API");
     pushSmsAndCheck(sms.c_str());
-    // sendToAPI(sms);
   }
-  
-  unsigned long currentMillis = millis(); // Get the current time
-  
+
+  unsigned long currentMillis = millis();  // Get the current time
+
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
     Serial.print(".");
     // check allSMSWithInfo
     // if timeout for receiving SMS send uncompleted sms to server;
     // if found completion then send to api.
-    // cout << i << ". Before checking all SMS with len " << allSMSWithInfo.size() << endl;
-    checkAllSMSAndSend();
-    // cout << i << ". After checking all SMS with len " << allSMSWithInfo.size() << endl;
+    if (allSMSWithInfo.size() > 0) {
+      Serial.printf("Before checking all SMS with len %d\n", allSMSWithInfo.size());
+      checkAllSMSAndSend();
+      Serial.printf("After checking all SMS with len %d", allSMSWithInfo.size());
 
-    // print allSMSWithInfo
-    // cout << "Printing allSMSWithInfo" << endl;
-    // for (int i = 0; i < allSMSWithInfo.size(); i++)
-    // {
-    //     for (int j = 0; j < allSMSWithInfo[i].size(); j++)
-    //     {
-    //         cout << allSMSWithInfo[i][j] << " ";
-    //     }
-    // }
-    // cout << "\n\n--End of printing allSMSWithInfo" << endl
-    //      << endl
-    //      << endl;
+      // print allSMSWithInfo
+      Serial.println("Printing allSMSWithInfo");
+      for (int i = 0; i < allSMSWithInfo.size(); i++) {
+        for (int j = 0; j < allSMSWithInfo[i].size(); j++) {
+          Serial.print(allSMSWithInfo[i][j].c_str());
+        }
+      }
+      Serial.println("\n\n--End of printing allSMSWithInfo\n\n");
+    }
   }
 }
 
