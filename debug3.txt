@@ -1,0 +1,204 @@
+
+Connecting to WiFi.....
+WiFi connected!
+IP Address: 192.168.83.101
+.....Received SMS: 
+
+*PSNWID: "470","01", "Grameenphone", 0, "", 8
+
+DST: 0
+
+Not a SMS response....
+..Received SMS: 
+
++CMT: "+8801324204739","","25/01/02,20:14:43+24",145,32,0,0,"+8801700000600",145,153
+255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+
+First 3 char are : 255
+Is earlier exits in allSMSVector: 0
+Length of SMS: 255
+Length of body: 155
+SMS is long. Waiting for next part
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+Received SMS: 
+
+*PSNWID: "470","01", "Grameenphone", 0, "", 8
+
+DST: 0
+
+Not a SMS response....
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+.Before checking all SMS with len 1
+After checking all SMS with len 1Printing allSMSWithInfo
++880132420473925/01/0220:14:43+8801700000600153255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+255
+
+--End of printing allSMSWithInfo
+
+
+Received SMS: 
+
++CMT: "+8801324204739","","25/01/02,20:14:44+24",145,32,0,0,"+8801700000600",145,102
+MS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+
+First 3 char are : MS 
+Difference: 1
+Comparing: 1111
+Is earlier exits in allSMSVector: 1
+Part of another SMS
+send to Searching for main SMS
+Header with SMS body: 
++880132420473925/01/0220:14:44+8801700000600102MS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+
+1
+Difference: 1
+Comparing: 1111
+Found the main SMS
+255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+MS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+---------255
+
+Sending to API.....
+
++880132420473925/01/0220:14:44+8801700000600102255There we have a large SMS with 6 sentence.
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large S
+MS with 6 sentence
+There we have a large SMS with 6 sentence
+There we have a large SMS with 6 sentence
+
+
+Send is done
+
+Total SMS send: 1SMS is part of another SMS
+...Received SMS: 
+
+*PSUTTZ: 2025, 1, 2, 14, 15, 3, "+24", 0
+
+DST: 0
+
+Not a SMS response....

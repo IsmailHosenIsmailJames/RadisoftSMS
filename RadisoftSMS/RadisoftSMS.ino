@@ -90,11 +90,36 @@ bool sendToAPI(vector<string> &headerWithSMSBody) {
   Serial.println("\nSending to API.....\n");
   for (int i = 0; i < headerWithSMSBody.size(); i++) {
     Serial.print(headerWithSMSBody[i].c_str());
+    Serial.print(",");
   }
   Serial.println("\n\nSend is done\n");
   totalSMSsend++;
   Serial.printf("Total SMS send: %d", totalSMSsend);
-  return true;
+
+  // +8801324204739,25/01/02,20:25:33,+8801700000600,102,255There we have a large SMS with 6 sentence.
+  // There we have a large SMS with 6 sentence
+  // There we have a large SMS with 6 sentence
+  // There we have a large S
+  // MS with 6 sentence
+  // There we have a large SMS with 6 sentence
+  // There we have a large SMS with 6 sentence
+
+  DynamicJsonDocument doc(700);
+  doc["number"] = headerWithSMSBody[0];
+  doc["date"] = headerWithSMSBody[1];
+  doc["time"] = headerWithSMSBody[2];
+  doc["sms"] = headerWithSMSBody[5];
+
+
+  // Serialize the JSON object to a string
+  String jsonString;
+  serializeJson(doc, jsonString);
+  String feedback = sendToAPI(jsonString);
+  if (feedback.length() > 0) {
+    return true;
+  } else {
+    return true;
+  }
 }
 
 bool isMatchedTwoHeader(vector<string> &vector1, vector<string> &vector2) {
@@ -173,7 +198,8 @@ void checkAllSMSAndSend() {
 
 
 void pushSmsAndCheck(string sms) {
-  if (sms.find("+CMT") != -1) {
+  if (sms.find("+CMT:") != -1) {
+    sms = sms.substr(3, sms.length() - 1);
     int indexOfEndOfFirstLine = sms.find("\n");
     string header = sms.substr(0, indexOfEndOfFirstLine);
     string body = sms.substr(indexOfEndOfFirstLine + 1);
@@ -183,7 +209,7 @@ void pushSmsAndCheck(string sms) {
     Serial.print("First 3 char are : ");
     Serial.println(first3Char.c_str());
     bool isExits = isExitsInAllSMSVector(headerInfoWithBody);
-    Serial.printf( "Is earlier exits in allSMSVector: %d\n", isExits);
+    Serial.printf("Is earlier exits in allSMSVector: %d\n", isExits);
     if ((!isExits) && first3Char[0] <= '9' && first3Char[0] >= '0' && first3Char[1] <= '9' && first3Char[1] >= '0' && first3Char[2] <= '9' && first3Char[2] >= '0') {
       int lenOfSMSUpcomingSMS = stoi(first3Char);
       Serial.printf("Length of SMS: %d\n", lenOfSMSUpcomingSMS);
@@ -313,13 +339,12 @@ void loop() {
   }
 }
 
-String sendToAPI(String smsText) {
+String sendToAPI(String payload) {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.begin(apiEndpoint);
     http.addHeader("Content-Type", "application/json");
 
-    String payload = createJson(smsText);
     Serial.println("Sending to " + apiEndpoint);
     Serial.println(payload);
     int httpResponseCode = http.POST(payload);
@@ -341,15 +366,4 @@ String sendToAPI(String smsText) {
     http.end();
   }
   return "";
-}
-
-String createJson(const String &input) {
-  // Create a dynamic JSON document
-  DynamicJsonDocument doc(256);
-  doc["sms"] = input;
-
-  // Serialize the JSON object to a string
-  String jsonString;
-  serializeJson(doc, jsonString);
-  return jsonString;
 }

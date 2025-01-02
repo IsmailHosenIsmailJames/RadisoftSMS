@@ -224,6 +224,7 @@ int main()
     for (int i = 0; i < allSMS.size(); i++)
     {
         string sms = allSMS[i];
+        sms = sms.substr(1, sms.length() - 1);
         int indexOfEndOfFirstLine = sms.find("\n");
         string header = sms.substr(0, indexOfEndOfFirstLine);
         string body = sms.substr(indexOfEndOfFirstLine + 1);
