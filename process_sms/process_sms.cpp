@@ -5,6 +5,7 @@
 
 using namespace std;
 
+vector<vector<string>> allSMSWithInfo;
 int maxTimeDifference = 5; // Maximum time difference in seconds
 
 vector<string> extractHeaderInformation(const string &input)
@@ -124,11 +125,11 @@ bool isMatchedTwoHeader(vector<string> &vector1, vector<string> &vector2)
     }
 }
 
-bool isExitsInAllSMSVector(vector<vector<string>> &allSMSVectorWithInfo, vector<string> &headerWithSMSBody)
+bool isExitsInAllSMSVector( vector<string> &headerWithSMSBody)
 {
-    for (int i = 0; i < allSMSVectorWithInfo.size(); i++)
+    for (int i = 0; i < allSMSWithInfo.size(); i++)
     {
-        if (isMatchedTwoHeader(allSMSVectorWithInfo[i], headerWithSMSBody))
+        if (isMatchedTwoHeader(allSMSWithInfo[i], headerWithSMSBody))
         {
             return true;
         }
@@ -136,7 +137,7 @@ bool isExitsInAllSMSVector(vector<vector<string>> &allSMSVectorWithInfo, vector<
     return false;
 }
 
-bool searchForMainSMSAndInsert(vector<vector<string>> &allSMSVectorWithInfo, vector<string> &headerWithSMSBody)
+bool searchForMainSMSAndInsert( vector<string> &headerWithSMSBody)
 {
     cout << "send to Searching for main SMS" << endl;
     cout << "Header with SMS body: " << endl;
@@ -145,15 +146,15 @@ bool searchForMainSMSAndInsert(vector<vector<string>> &allSMSVectorWithInfo, vec
         cout << i << ". " << headerWithSMSBody[i] << " ";
     }
     cout << endl;
-    cout << allSMSVectorWithInfo.size() << endl;
-    for (int i = 0; i < allSMSVectorWithInfo.size(); i++)
+    cout << allSMSWithInfo.size() << endl;
+    for (int i = 0; i < allSMSWithInfo.size(); i++)
     {
-        if (isMatchedTwoHeader(allSMSVectorWithInfo[i], headerWithSMSBody))
+        if (isMatchedTwoHeader(allSMSWithInfo[i], headerWithSMSBody))
         {
             // found the main SMS
             cout << "Found the main SMS" << endl;
-            string fullSMS = allSMSVectorWithInfo[i][5] + headerWithSMSBody[5];
-            int lenOfFullSMSOnSMSdata = stoi(allSMSVectorWithInfo[i][6]);
+            string fullSMS = allSMSWithInfo[i][5] + headerWithSMSBody[5];
+            int lenOfFullSMSOnSMSdata = stoi(allSMSWithInfo[i][6]);
 
             headerWithSMSBody.pop_back();
             headerWithSMSBody.push_back(fullSMS);
@@ -164,14 +165,14 @@ bool searchForMainSMSAndInsert(vector<vector<string>> &allSMSVectorWithInfo, vec
             {
                 // send to API
                 sendToAPI(headerWithSMSBody);
-                allSMSVectorWithInfo.erase(allSMSVectorWithInfo.begin() + i);
+                allSMSWithInfo.erase(allSMSWithInfo.begin() + i);
                 return true;
             }
             else
             {
-                allSMSVectorWithInfo[i].erase(allSMSVectorWithInfo[i].begin() + 5);
-                allSMSVectorWithInfo[i].insert(allSMSVectorWithInfo[i].begin() + 5, fullSMS);
-                cout << allSMSVectorWithInfo[i][5] << endl;
+                allSMSWithInfo[i].erase(allSMSWithInfo[i].begin() + 5);
+                allSMSWithInfo[i].insert(allSMSWithInfo[i].begin() + 5, fullSMS);
+                cout << allSMSWithInfo[i][5] << endl;
                 cout << "Inserted again" << endl;
                 return true;
             }
@@ -181,7 +182,7 @@ bool searchForMainSMSAndInsert(vector<vector<string>> &allSMSVectorWithInfo, vec
     return false;
 }
 
-void checkAllSMSAndSend(vector<vector<string>> &allSMSWithInfo)
+void checkAllSMSAndSend()
 {
     for (int i = 0; i < allSMSWithInfo.size(); i++)
     {
@@ -210,17 +211,16 @@ int main()
     s2 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:56+24\",145,32,0,0,\"+8801700000600\",145,99\nMS with 6 sentence\nThere we have a large SMS with 6 sentence";
     s3 = "+CMT: \"+8801324204739\",\"\",\"25/01/01,13:10:57+24\",145,32,0,0,\"+8801700000600\",145,99\n\nThere we have a large SMS with 6 sentence";
 
+    
+
         allSMS.push_back(s1);
         allSMS.push_back(s2);
-        allSMS.push_back(s3);
+        allSMS.push_back(s3.c_str());
 
         // allSMS.push_back(s1);
         // allSMS.push_back(s2);
         // allSMS.push_back(s3);
 
-
-
-    vector<vector<string>> allSMSWithInfo;
 
     for (int i = 0; i < allSMS.size(); i++)
     {
@@ -232,7 +232,7 @@ int main()
         headerInfoWithBody.push_back(body);
         string first3Char = body.substr(0, 3);
         cout << first3Char << endl;
-        if ((!isExitsInAllSMSVector(allSMSWithInfo, headerInfoWithBody)) && first3Char[0] <= '9' && first3Char[0] >= '0' && first3Char[1] <= '9' && first3Char[1] >= '0' && first3Char[2] <= '9' && first3Char[2] >= '0')
+        if ((!isExitsInAllSMSVector(headerInfoWithBody)) && first3Char[0] <= '9' && first3Char[0] >= '0' && first3Char[1] <= '9' && first3Char[1] >= '0' && first3Char[2] <= '9' && first3Char[2] >= '0')
         {
             int lenOfSMSUpcomingSMS = stoi(first3Char);
             cout << "Length of SMS: " << lenOfSMSUpcomingSMS << endl;
@@ -260,7 +260,7 @@ int main()
             // Search for that and insert
             // if not found, its not form the customers
             cout << "Part of another SMS" << endl;
-            bool isFound = searchForMainSMSAndInsert(allSMSWithInfo, headerInfoWithBody);
+            bool isFound = searchForMainSMSAndInsert(headerInfoWithBody);
             cout << i << ". SMS is part of another SMS" << endl;
             if (!isFound)
             {
@@ -274,7 +274,7 @@ int main()
         // if timeout for receiving SMS send uncompleted sms to server;
         // if found completion then send to api.
         cout << i << ". Before checking all SMS with len " << allSMSWithInfo.size() << endl;
-        checkAllSMSAndSend(allSMSWithInfo);
+        checkAllSMSAndSend();
         cout << i << ". After checking all SMS with len " << allSMSWithInfo.size() << endl;
 
         // print allSMSWithInfo
