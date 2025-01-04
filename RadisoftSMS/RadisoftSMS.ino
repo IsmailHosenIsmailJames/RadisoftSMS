@@ -198,7 +198,7 @@ void checkAllSMSAndSend() {
 
 
 void pushSmsAndCheck(string sms) {
-  if (sms.find("+CMT:") != -1) {
+  if ((sms.find("+CMT:") != -1) || (sms.find("+CMGL") != -1)) {
     sms = sms.substr(3, sms.length() - 1);
     int indexOfEndOfFirstLine = sms.find("\n");
     string header = sms.substr(0, indexOfEndOfFirstLine);
@@ -261,8 +261,9 @@ void sendATCommand(const char *command, uint16_t delayMs = 1000) {
   GSM.println(command);  // Send AT command
   delay(delayMs);        // Wait for a response
   while (GSM.available()) {
-    String response = GSM.readString();  // Read GSM response
-    Serial.println(response);            // Print GSM response to Serial Monitor
+    String sms = GSM.readString();  // Read GSM response
+    Serial.println(sms);            // Print GSM response to Serial Monitor
+    pushSmsAndCheck(sms.c_str());
   }
 }
 
@@ -303,6 +304,10 @@ void setup() {
 unsigned long previousMillis = 0;     // Stores the last time the task was executed
 const unsigned long interval = 1000;  // Interval in milliseconds (1 second)
 
+unsigned long previousMillis2 = 0;     // Stores the last time the task was executed
+const unsigned long interval2 = 5000;  // Interval in milliseconds (1 second)
+
+
 void loop() {
   // Keep checking for responses or further actions
   while (GSM.available()) {
@@ -315,6 +320,10 @@ void loop() {
   }
 
   unsigned long currentMillis = millis();  // Get the current time
+  if (currentMillis - previousMillis2 >= interval2) {
+    previousMillis2 = currentMillis;
+    sendATCommand("AT+CMGL=\"REC UNREAD\"");
+  }
 
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
